@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPA</title>
+    <script type="text/spa-template" data-name="nav">nav</script>
+    <script type="text/spa-template" data-name="root">root</script>
+    <script type="text/spa-template" data-name="checkout">checkout</script>
+    <script type="text/spa-template" data-name="store">store</script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        // const element = document.createElement('div')
+        // const text = document.createTextNode('TEXT!!!')
+        // element.appendChild(text)
+        // document.body.appendChild(element)
+        function getTemplate (selector) {
+          return document.querySelector(selector).textContent
+        }
+        const templates = {
+          nav: getTemplate('head script[data-name="nav"]'),
+          root: getTemplate('head script[data-name="root"]'),
+          checkout: getTemplate('head script[data-name="checkout"]'),
+          store: getTemplate('head script[data-name="store"]'),
+        }
+        const app = document.getElementById('app')
+        let URL = '/'
+        function render () {
+          let outHTML = ''
+          // switch (window.location.pathname) {
+          switch (URL) {
+            case '/':
+              outHTML = templates.nav + templates.root
+              break;
+            case '/store':
+              outHTML = templates.nav + templates.store
+              break;
+            case '/checkout':
+              outHTML = templates.nav + templates.checkout
+              break;
+            case '/submit':
+              outHTML = templates.nav + templates.root
+              break;
+          }
+          app.innerHTML = outHTML
+        }
+        render()
+
+        document.body.addEventListener('click', (e) => {
+          const {target} = e
+          // var target = e.target
+          if (target.nodeName === 'A' && target.nodeType === 1) {
+            e.preventDefault()
+            URL = target.getAttribute('href')
+            // history.pushState({}, target.textContent, target.getAttribute('href'))
+            render()
+          }
+        })
+    </script>
+</body>
+</html>
